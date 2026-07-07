@@ -1,5 +1,6 @@
 from collections.abc import AsyncGenerator
 
+from sqlalchemy import event
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.ext.asyncio.engine import AsyncEngine
 
@@ -18,8 +19,18 @@ def get_async_engine() -> AsyncEngine:
                 "DATABASE_URL must be configured before using database sessions."
             )
         async_engine = create_async_engine(settings.database_url, pool_pre_ping=True)
+        if "asyncpg" in settings.database_url:
+            _register_pgvector_asyncpg(async_engine)
 
     return async_engine
+
+
+def _register_pgvector_asyncpg(engine: AsyncEngine) -> None:
+    from pgvector.asyncpg import register_vector
+
+    @event.listens_for(engine.sync_engine, "connect")
+    def connect(dbapi_connection, _: object) -> None:
+        dbapi_connection.run_async(register_vector)
 
 
 def get_sessionmaker() -> async_sessionmaker[AsyncSession]:
