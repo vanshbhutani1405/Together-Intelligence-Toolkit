@@ -1,19 +1,57 @@
+import { NavLink, Navigate, Route, Routes } from "react-router-dom";
+import Dashboard from "@/pages/Dashboard";
+import Diligence from "@/pages/Diligence";
+import Discover from "@/pages/Discover";
+import History from "@/pages/History";
+import RoutePage from "@/pages/Route";
+
+const navItems = [
+  { to: "/dashboard", label: "Dashboard" },
+  { to: "/discover", label: "Discover" },
+  { to: "/diligence", label: "Diligence" },
+  { to: "/route", label: "Route" },
+  { to: "/history", label: "History" },
+];
+
 function App() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background px-6 text-foreground">
-      <section className="w-full max-w-2xl space-y-4">
-        <p className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
-          Together Intelligence Toolkit
-        </p>
-        <h1 className="text-4xl font-semibold tracking-normal">
-          Scaffold ready.
-        </h1>
-        <p className="text-lg text-muted-foreground">
-          Vite, React, TailwindCSS, and shadcn/ui conventions are wired for the
-          next implementation step.
-        </p>
-      </section>
-    </main>
+    <div className="min-h-screen bg-cream font-sans text-ink">
+      <header className="px-6 pt-6">
+        <nav className="mx-auto flex max-w-[1200px] flex-col gap-5 rounded-full border border-border bg-white px-5 py-4 shadow-sm md:flex-row md:items-center md:justify-between md:px-7">
+          <NavLink
+            to="/dashboard"
+            className="font-serif text-sm font-medium uppercase tracking-[0.18em] text-ink"
+          >
+            Together Intelligence
+          </NavLink>
+          <div className="flex flex-wrap gap-2">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  [
+                    "rounded-full px-4 py-2 text-sm text-ink-secondary transition duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]",
+                    isActive ? "text-ink" : "hover:text-ink",
+                  ].join(" ")
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </div>
+        </nav>
+      </header>
+
+      <Routes>
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/discover" element={<Discover />} />
+        <Route path="/diligence" element={<Diligence />} />
+        <Route path="/route" element={<RoutePage />} />
+        <Route path="/history" element={<History />} />
+      </Routes>
+    </div>
   );
 }
 

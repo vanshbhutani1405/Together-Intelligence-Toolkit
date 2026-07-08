@@ -5,12 +5,22 @@ const config = {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        serif: ["Fraunces", "ui-serif", "Georgia", "serif"],
+      },
       colors: {
-        border: "hsl(var(--border))",
+        cream: "#F7F4EF",
+        ink: {
+          DEFAULT: "#1A1A18",
+          secondary: "#6B6862",
+        },
+        terracotta: "#B5654A",
+        border: "#E8E3DA",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        background: "#F7F4EF",
+        foreground: "#1A1A18",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -36,8 +46,8 @@ const config = {
           foreground: "hsl(var(--popover-foreground))",
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: "#FFFFFF",
+          foreground: "#1A1A18",
         },
       },
       borderRadius: {
