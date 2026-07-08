@@ -5,6 +5,7 @@ from fastapi import FastAPI
 
 from app.api.corridor import router as corridor_router
 from app.api.moatlens import router as moatlens_router
+from app.api.navigator import router as navigator_router
 from app.core.config import settings
 from app.utils.logger import get_logger
 
@@ -21,6 +22,7 @@ async def lifespan(_: FastAPI) -> AsyncGenerator[None, None]:
 app = FastAPI(title="Together Intelligence Toolkit", lifespan=lifespan)
 app.include_router(corridor_router)
 app.include_router(moatlens_router)
+app.include_router(navigator_router)
 
 
 @app.get("/health")
