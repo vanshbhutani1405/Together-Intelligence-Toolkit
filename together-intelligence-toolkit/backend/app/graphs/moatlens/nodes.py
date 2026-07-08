@@ -30,7 +30,8 @@ async def claim_extraction_node(state: dict[str, Any]) -> dict[str, Any]:
         ]
     )
     content = await _call_groq(
-        CLAIM_EXTRACTION_PROMPT.format(candidate_text=candidate_text),
+        CLAIM_EXTRACTION_PROMPT.format(candidate_text=candidate_text)
+        + "\n\nRespond only with valid JSON.",
         temperature=0.1,
         max_tokens=450,
     )
@@ -44,7 +45,8 @@ async def bull_agent_node(state: dict[str, Any]) -> dict[str, Any]:
     report = await _call_groq(
         BULL_AGENT_PROMPT.format(
             extracted_claims=json.dumps(state.get("extracted_claims", {}), indent=2)
-        ),
+        )
+        + "\n\nRespond only with valid JSON.",
         temperature=0.25,
         max_tokens=650,
     )
@@ -57,7 +59,8 @@ async def bear_agent_node(state: dict[str, Any]) -> dict[str, Any]:
     report = await _call_groq(
         BEAR_AGENT_PROMPT.format(
             extracted_claims=json.dumps(state.get("extracted_claims", {}), indent=2)
-        ),
+        )
+        + "\n\nRespond only with valid JSON.",
         temperature=0.25,
         max_tokens=650,
     )
@@ -71,7 +74,8 @@ async def conflict_checker_node(state: dict[str, Any]) -> dict[str, Any]:
         CONFLICT_CHECKER_PROMPT.format(
             bull_report=state.get("bull_report", ""),
             bear_report=state.get("bear_report", ""),
-        ),
+        )
+        + "\n\nRespond only with valid JSON.",
         temperature=0.0,
         max_tokens=350,
     )
@@ -106,7 +110,8 @@ async def synthesis_node(state: dict[str, Any]) -> dict[str, Any]:
             bull_report=state.get("bull_report", ""),
             bear_report=state.get("bear_report", ""),
             conflicts=json.dumps(state.get("conflicts", []), indent=2),
-        ),
+        )
+        + "\n\nRespond only with valid JSON.",
         temperature=0.1,
         max_tokens=900,
     )
@@ -122,6 +127,7 @@ async def _call_groq(prompt: str, temperature: float, max_tokens: int) -> str:
         messages=[{"role": "user", "content": prompt}],
         temperature=temperature,
         max_tokens=max_tokens,
+        response_format={"type": "json_object"},
     )
     return response.choices[0].message.content or ""
 
@@ -131,6 +137,9 @@ def _parse_json_object(text: str) -> dict[str, Any]:
         return json.loads(text)
     except json.JSONDecodeError:
         match = re.search(r"\{.*\}", text, re.DOTALL)
-        if not match:
-            raise
-        return json.loads(match.group(0))
+        if match:
+            try:
+                return json.loads(match.group(0))
+            except json.JSONDecodeError:
+                pass
+        return {"conflicts": []}
