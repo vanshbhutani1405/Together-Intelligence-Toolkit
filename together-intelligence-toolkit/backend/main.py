@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from app.api.corridor import router as corridor_router
 from app.core.config import settings
 from app.utils.logger import get_logger
 
@@ -17,6 +18,7 @@ async def lifespan(_: FastAPI) -> AsyncGenerator[None, None]:
 
 
 app = FastAPI(title="Together Intelligence Toolkit", lifespan=lifespan)
+app.include_router(corridor_router)
 
 
 @app.get("/health")

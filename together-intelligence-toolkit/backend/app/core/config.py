@@ -8,6 +8,7 @@ PROJECT_DIR = BACKEND_DIR.parent
 
 class Settings(BaseSettings):
     groq_api_key: str = ""
+    github_token: str = ""
     supabase_url: str = ""
     supabase_key: str = ""
     database_url: str = ""
