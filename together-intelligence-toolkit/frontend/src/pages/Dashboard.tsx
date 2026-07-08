@@ -6,10 +6,33 @@ import type { RunRecord } from "@/types/api";
 
 export default function Dashboard() {
   const [runs, setRuns] = useState<RunRecord[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    getHistory().then(setRuns).catch((err) => setError(err.message));
+    let cancelled = false;
+
+    setLoading(true);
+    getHistory()
+      .then((data) => {
+        if (!cancelled) {
+          setRuns(data);
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(err.message);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const breakdown = useMemo(() => {
@@ -33,6 +56,8 @@ export default function Dashboard() {
       </section>
 
       {error ? <p className="mt-10 text-sm text-terracotta">{error}</p> : null}
+
+      {loading ? <p className="mt-10 text-sm text-ink-secondary">Loading dashboard...</p> : null}
 
       <section className="mt-16 grid gap-6 md:grid-cols-[0.8fr_1.2fr]">
         <div className="rounded-xl border border-border bg-white p-8">

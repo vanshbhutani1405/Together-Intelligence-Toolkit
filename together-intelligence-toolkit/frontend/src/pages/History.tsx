@@ -6,10 +6,33 @@ import type { RunRecord } from "@/types/api";
 
 export default function History() {
   const [runs, setRuns] = useState<RunRecord[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    getHistory().then(setRuns).catch((err) => setError(err.message));
+    let cancelled = false;
+
+    setLoading(true);
+    getHistory()
+      .then((data) => {
+        if (!cancelled) {
+          setRuns(data);
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(err.message);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
@@ -34,7 +57,19 @@ export default function History() {
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {runs.map((run) => (
+            {loading ? (
+              <tr>
+                <td className="px-6 py-8 text-sm text-ink-secondary" colSpan={4}>
+                  Loading history...
+                </td>
+              </tr>
+            ) : runs.length === 0 ? (
+              <tr>
+                <td className="px-6 py-8 text-sm text-ink-secondary" colSpan={4}>
+                  No data yet
+                </td>
+              </tr>
+            ) : runs.map((run) => (
               <tr key={run.id}>
                 <td className="px-6 py-5 capitalize">{run.module}</td>
                 <td className="px-6 py-5">

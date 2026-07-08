@@ -64,7 +64,7 @@ export default function Diligence() {
           placeholder="Candidate ID"
           className="min-h-[64px] w-full rounded-full border border-border bg-white px-7 font-sans text-base text-ink outline-none transition duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] placeholder:text-base placeholder:text-ink-secondary focus:border-ink md:max-w-sm"
         />
-        <ActionButton onClick={runDiligence} disabled={loading || !parsedId}>
+        <ActionButton onClick={runDiligence} disabled={loading || !parsedId} loading={loading}>
           Run Diligence
         </ActionButton>
       </div>
@@ -77,7 +77,7 @@ export default function Diligence() {
           <div className="rounded-xl border border-border bg-white p-6">
             <div className="flex flex-wrap gap-5">
               <StatusPill label={`Overall ${report.overall_score.toFixed(2)}`} tone="accent" />
-              <StatusPill label={`Confidence ${report.confidence.toFixed(2)}`} />
+              <StatusPill label={`Confidence ${formatPercent(report.confidence)}`} />
               <StatusPill
                 label={report.human_review_required ? "Human review required" : "No human review"}
                 tone={report.human_review_required ? "accent" : "dark"}
@@ -136,4 +136,9 @@ function TextBlock({ title, text }: { title: string; text: string }) {
       <p className="mt-4 text-sm leading-6 text-ink">{text}</p>
     </div>
   );
+}
+
+function formatPercent(value?: number | null) {
+  if (typeof value !== "number") return "n/a";
+  return `${Math.round(value * 100)}%`;
 }

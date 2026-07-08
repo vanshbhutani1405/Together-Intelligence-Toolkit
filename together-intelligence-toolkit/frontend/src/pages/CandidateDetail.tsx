@@ -12,6 +12,7 @@ export default function CandidateDetail() {
   const [reports, setReports] = useState<ReportRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [candidateError, setCandidateError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id || Number.isNaN(candidateId)) {
@@ -24,6 +25,7 @@ export default function CandidateDetail() {
 
     setLoading(true);
     setError(null);
+    setCandidateError(null);
 
     getCandidateReports(candidateId)
       .then((data) => {
@@ -48,8 +50,9 @@ export default function CandidateDetail() {
           setCandidate(data.find((item) => item.id === candidateId) ?? null);
         }
       })
-      .catch(() => {
+      .catch((err: Error) => {
         if (!cancelled) {
+          setCandidateError(err.message);
           setCandidate(null);
         }
       });
@@ -78,6 +81,7 @@ export default function CandidateDetail() {
 
       {loading ? <p className="mt-8 text-sm text-ink-secondary">Loading candidate reports...</p> : null}
       {error ? <p className="mt-8 text-sm text-terracotta">{error}</p> : null}
+      {candidateError ? <p className="mt-4 text-sm text-terracotta">{candidateError}</p> : null}
 
       {!loading && !error ? (
         <section className="mt-14 space-y-8">
@@ -91,8 +95,8 @@ export default function CandidateDetail() {
                 {candidate.description}
               </p>
               <div className="mt-6 grid gap-4 md:grid-cols-2">
-                <InfoBlock label="Similarity score" value={formatScore(candidate.similarity_score)} />
-                <InfoBlock label="Confidence" value={formatScore(candidate.confidence)} />
+                <InfoBlock label="Similarity score" value={formatPercent(candidate.similarity_score)} />
+                <InfoBlock label="Confidence" value={formatPercent(candidate.confidence)} />
               </div>
             </div>
           ) : null}
@@ -151,9 +155,9 @@ function InfoBlock({ label, value }: { label: string; value: string }) {
   );
 }
 
-function formatScore(value?: number | null) {
+function formatPercent(value?: number | null) {
   if (typeof value !== "number") return "n/a";
-  return value.toFixed(2);
+  return `${Math.round(value * 100)}%`;
 }
 
 function formatReportTitle(reportType: string) {

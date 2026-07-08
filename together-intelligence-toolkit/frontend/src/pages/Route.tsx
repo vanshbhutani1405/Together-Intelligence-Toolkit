@@ -75,6 +75,7 @@ export default function RoutePage() {
         <ActionButton
           onClick={runRouting}
           disabled={loading || !parsedId || !applicationText.trim()}
+          loading={loading}
         >
           Get Recommendation
         </ActionButton>
@@ -92,7 +93,7 @@ export default function RoutePage() {
             {recommendation.recommended_pathway}
           </h2>
           <div className="mt-6 flex flex-wrap gap-5">
-            <StatusPill label={`Confidence ${recommendation.confidence.toFixed(2)}`} tone="accent" />
+            <StatusPill label={`Confidence ${formatPercent(recommendation.confidence)}`} tone="accent" />
             <StatusPill
               label={recommendation.human_review ? "Human review" : "Autonomous route"}
               tone={recommendation.human_review ? "accent" : "dark"}
@@ -113,4 +114,9 @@ export default function RoutePage() {
       ) : null}
     </PageShell>
   );
+}
+
+function formatPercent(value?: number | null) {
+  if (typeof value !== "number") return "n/a";
+  return `${Math.round(value * 100)}%`;
 }

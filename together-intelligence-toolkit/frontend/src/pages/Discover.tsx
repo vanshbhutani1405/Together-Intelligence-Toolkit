@@ -61,7 +61,7 @@ export default function Discover() {
           placeholder="AI-native infrastructure..."
           className="min-h-[64px] flex-1 rounded-full border border-border bg-white px-7 font-sans text-base text-ink outline-none transition duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] placeholder:text-base placeholder:text-ink-secondary focus:border-ink"
         />
-        <ActionButton onClick={runDiscovery} disabled={loading || !query.trim()}>
+        <ActionButton onClick={runDiscovery} disabled={loading || !query.trim()} loading={loading}>
           Run Discovery
         </ActionButton>
       </div>
@@ -83,8 +83,8 @@ export default function Discover() {
                 {candidate.description}
               </p>
               <div className="mt-6 flex flex-wrap gap-4">
-                <StatusPill label={`Similarity ${formatScore(candidate.similarity_score)}`} tone="accent" />
-                <StatusPill label={`Confidence ${formatScore(candidate.confidence)}`} />
+                <StatusPill label={`Similarity ${formatPercent(candidate.similarity_score)}`} tone="accent" />
+                <StatusPill label={`Confidence ${formatPercent(candidate.confidence)}`} />
               </div>
               {candidate.reasoning ? (
                 <p className="mt-6 text-sm leading-6 text-ink">{candidate.reasoning}</p>
@@ -92,7 +92,7 @@ export default function Discover() {
               <div className="mt-6 space-y-2 pb-12">
                 {(candidate.portfolio_matches ?? []).slice(0, 3).map((match) => (
                   <p key={match.name} className="text-xs text-ink-secondary">
-                    {match.name} - {formatScore(match.similarity)}
+                    {match.name} - {formatPercent(match.similarity)}
                   </p>
                 ))}
               </div>
@@ -112,7 +112,7 @@ export default function Discover() {
   );
 }
 
-function formatScore(value?: number | null) {
+function formatPercent(value?: number | null) {
   if (typeof value !== "number") return "n/a";
-  return value.toFixed(2);
+  return `${Math.round(value * 100)}%`;
 }

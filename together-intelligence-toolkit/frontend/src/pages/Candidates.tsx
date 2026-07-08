@@ -6,10 +6,33 @@ import type { Candidate } from "@/types/api";
 
 export default function Candidates() {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    getCandidates().then(setCandidates).catch((err) => setError(err.message));
+    let cancelled = false;
+
+    setLoading(true);
+    getCandidates()
+      .then((data) => {
+        if (!cancelled) {
+          setCandidates(data);
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(err.message);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
@@ -34,7 +57,19 @@ export default function Candidates() {
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {candidates.map((candidate) => (
+            {loading ? (
+              <tr>
+                <td className="px-6 py-8 text-sm text-ink-secondary" colSpan={4}>
+                  Loading candidates...
+                </td>
+              </tr>
+            ) : candidates.length === 0 ? (
+              <tr>
+                <td className="px-6 py-8 text-sm text-ink-secondary" colSpan={4}>
+                  No data yet
+                </td>
+              </tr>
+            ) : candidates.map((candidate) => (
               <tr key={candidate.id}>
                 <td className="px-6 py-5">
                   <Link className="hover:text-ink" to={`/candidates/${candidate.id}`}>
@@ -42,10 +77,10 @@ export default function Candidates() {
                   </Link>
                 </td>
                 <td className="px-6 py-5 text-sm text-ink-secondary">
-                  {formatScore(candidate.similarity_score)}
+                  {formatPercent(candidate.similarity_score)}
                 </td>
                 <td className="px-6 py-5 text-sm text-ink-secondary">
-                  {formatScore(candidate.confidence)}
+                  {formatPercent(candidate.confidence)}
                 </td>
                 <td className="px-6 py-5 text-sm text-ink-secondary">
                   {formatDate(candidate.created_at)}
@@ -59,9 +94,9 @@ export default function Candidates() {
   );
 }
 
-function formatScore(value?: number | null) {
+function formatPercent(value?: number | null) {
   if (typeof value !== "number") return "n/a";
-  return value.toFixed(2);
+  return `${Math.round(value * 100)}%`;
 }
 
 function formatDate(value?: string | null) {

@@ -34,8 +34,8 @@ function App() {
                 to={item.to}
                 className={({ isActive }) =>
                   [
-                    "rounded-full px-4 py-2 text-sm text-ink-secondary transition duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]",
-                    isActive ? "text-ink" : "hover:text-ink",
+                      "rounded-full px-4 py-2 text-sm text-ink-secondary transition duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]",
+                      isActive ? "font-medium text-ink underline decoration-2 underline-offset-8" : "hover:text-ink",
                   ].join(" ")
                 }
               >
