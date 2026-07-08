@@ -64,7 +64,7 @@ export default function Dashboard() {
 
       {loading ? <p className="mt-10 text-sm text-ink-secondary">Loading dashboard...</p> : null}
 
-      <section className="mt-16 grid gap-6 md:grid-cols-[0.8fr_1.2fr]">
+      <section className="mt-16 grid gap-6">
         <div className="rounded-xl border border-border bg-white p-8">
           <p className="text-sm uppercase tracking-[0.16em] text-ink-secondary">
             Workflow snapshot
