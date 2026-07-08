@@ -9,3 +9,5 @@ class DiligenceJSON(BaseModel):
     model_dependency: str
     overall_score: float
     confidence: float
+    human_review_required: bool
+    missing_evidence: str

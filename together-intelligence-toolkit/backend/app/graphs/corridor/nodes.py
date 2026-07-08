@@ -3,7 +3,6 @@ import math
 import re
 from typing import Any
 
-from groq import AsyncGroq
 from sqlalchemy import select
 
 from app.core.config import settings
@@ -13,6 +12,7 @@ from app.prompts.corridor_reasoning import CORRIDOR_REASONING_PROMPT
 from app.utils.arxiv import search_arxiv
 from app.utils.embedding import embed_text
 from app.utils.github import search_github
+from app.utils.groq_client import get_groq_client
 from app.utils.hn import search_hackernews
 from app.utils.logger import get_logger
 
@@ -108,10 +108,7 @@ async def embedding_similarity_node(state: dict[str, Any]) -> dict[str, Any]:
 
 async def reasoning_node(state: dict[str, Any]) -> dict[str, Any]:
     logger.info("Generating Corridor reasoning with Groq...")
-    if not settings.groq_api_key:
-        raise RuntimeError("GROQ_API_KEY must be set for Corridor reasoning.")
-
-    client = AsyncGroq(api_key=settings.groq_api_key)
+    client = get_groq_client()
     reasoned = []
     for candidate in state.get("top_candidates", []):
         nearest = _nearest_portfolio_label(candidate)
