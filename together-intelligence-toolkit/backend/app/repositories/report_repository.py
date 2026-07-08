@@ -23,6 +23,10 @@ async def create(
     return report
 
 
+async def get_by_id(db: AsyncSession, report_id: int) -> Report | None:
+    return await db.get(Report, report_id)
+
+
 async def get_by_candidate_id(db: AsyncSession, candidate_id: int) -> list[Report]:
     result = await db.execute(
         select(Report)

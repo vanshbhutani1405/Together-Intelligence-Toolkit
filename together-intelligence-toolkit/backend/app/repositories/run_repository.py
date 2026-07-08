@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.run import Run
@@ -11,6 +12,13 @@ async def create(db: AsyncSession, module_name: str, status: str) -> Run:
     await db.commit()
     await db.refresh(run)
     return run
+
+
+async def list_all(db: AsyncSession, limit: int = 50) -> list[Run]:
+    result = await db.execute(
+        select(Run).order_by(Run.started_at.desc()).limit(limit)
+    )
+    return list(result.scalars().all())
 
 
 async def update_status(
