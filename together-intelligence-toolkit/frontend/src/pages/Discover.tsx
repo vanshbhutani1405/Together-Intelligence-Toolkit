@@ -17,6 +17,8 @@ const steps = [
   "Generating reasoning...",
 ];
 
+const exampleQueries = ["AI infra", "agentic dev tools", "healthcare AI", "developer tools"];
+
 export default function Discover() {
   const navigate = useNavigate();
   const [query, setQuery] = useState("AI agent developer tools");
@@ -47,7 +49,7 @@ export default function Discover() {
     <PageShell>
       <StepBadge number={1} label="Discover" />
       <section className="mt-8 max-w-4xl">
-        <h1>Corridor Atlas</h1>
+        <h1 className="text-[clamp(1.75rem,3vw,2.5rem)]">Corridor Atlas</h1>
         <p className="mt-6 max-w-2xl text-lg leading-8 text-ink-secondary">
           Search the frontier and surface companies with meaningful proximity to
           Together's portfolio.
@@ -64,6 +66,19 @@ export default function Discover() {
         <ActionButton onClick={runDiscovery} disabled={loading || !query.trim()} loading={loading}>
           Run Discovery
         </ActionButton>
+      </div>
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        {exampleQueries.map((exampleQuery) => (
+          <button
+            key={exampleQuery}
+            type="button"
+            onClick={() => setQuery(exampleQuery)}
+            className="rounded-full border border-border bg-white px-3 py-1.5 text-xs font-medium text-ink-secondary transition duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:text-ink"
+          >
+            {exampleQuery}
+          </button>
+        ))}
       </div>
 
       {loading ? <LoadingReasoning steps={steps} /> : null}

@@ -73,7 +73,7 @@ export default function CandidateDetail() {
   return (
     <PageShell>
       <section className="max-w-4xl">
-        <h1>Candidate Detail</h1>
+        <h1 className="text-[clamp(1.75rem,3vw,2.5rem)]">Candidate Detail</h1>
         <p className="mt-6 max-w-2xl text-lg leading-8 text-ink-secondary">
           Review the current diligence and routing output for this candidate.
         </p>

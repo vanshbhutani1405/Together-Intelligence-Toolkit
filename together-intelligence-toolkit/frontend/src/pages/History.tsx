@@ -38,7 +38,7 @@ export default function History() {
   return (
     <PageShell>
       <section className="max-w-4xl">
-        <h1>Run History</h1>
+        <h1 className="text-[clamp(1.75rem,3vw,2.5rem)]">Run History</h1>
         <p className="mt-6 max-w-2xl text-lg leading-8 text-ink-secondary">
           A restrained operational record of the toolkit's recent module runs.
         </p>

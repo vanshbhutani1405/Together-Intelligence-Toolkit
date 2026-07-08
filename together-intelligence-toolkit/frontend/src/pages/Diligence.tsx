@@ -50,7 +50,7 @@ export default function Diligence() {
     <PageShell>
       <StepBadge number={2} label="Evaluate" />
       <section className="mt-8 max-w-4xl">
-        <h1>MoatLens</h1>
+        <h1 className="text-[clamp(1.75rem,3vw,2.5rem)]">MoatLens</h1>
         <p className="mt-6 max-w-2xl text-lg leading-8 text-ink-secondary">
           Pressure-test AI-native defensibility through paired upside and risk
           arguments.

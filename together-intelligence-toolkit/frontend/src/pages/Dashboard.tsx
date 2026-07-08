@@ -42,13 +42,18 @@ export default function Dashboard() {
     }, {});
   }, [runs]);
 
+  const totalRuns = runs.length;
+  const completedRuns = breakdown.completed ?? 0;
+  const failedRuns = breakdown.failed ?? 0;
+  const moduleSummary = formatModuleSummary(runs);
+
   return (
     <PageShell>
       <section className="max-w-4xl">
         <p className="mb-5 text-sm uppercase tracking-[0.18em] text-ink-secondary">
           Dashboard
         </p>
-        <h1>Overview</h1>
+        <h1 className="text-[clamp(1.75rem,3vw,2.5rem)]">Overview</h1>
         <p className="mt-6 max-w-2xl text-lg leading-8 text-ink-secondary">
           A quiet view of recent intelligence workflows across discovery,
           diligence, and routing.
@@ -61,17 +66,17 @@ export default function Dashboard() {
 
       <section className="mt-16 grid gap-6 md:grid-cols-[0.8fr_1.2fr]">
         <div className="rounded-xl border border-border bg-white p-8">
-          <p className="text-sm text-ink-secondary">Total runs</p>
-          <p className="mt-6 font-sans text-7xl font-medium tracking-tight">
-            {runs.length}
+          <p className="text-sm uppercase tracking-[0.16em] text-ink-secondary">
+            Workflow snapshot
           </p>
-          <div className="mt-8 space-y-3">
-            {Object.entries(breakdown).map(([status, count]) => (
-              <div key={status} className="flex items-center justify-between">
-                <StatusPill label={status} tone={status === "completed" ? "dark" : "accent"} />
-                <span className="text-sm text-ink-secondary">{count}</span>
-              </div>
-            ))}
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <MetricBlock label="Total runs" value={String(totalRuns)} />
+            <MetricBlock label="Completed" value={String(completedRuns)} />
+            <MetricBlock label="Failed" value={String(failedRuns)} />
+          </div>
+          <div className="mt-8 border-t border-border pt-5">
+            <p className="text-sm uppercase tracking-[0.16em] text-ink-secondary">By module</p>
+            <p className="mt-3 text-sm leading-6 text-ink-secondary">{moduleSummary}</p>
           </div>
         </div>
 
@@ -99,4 +104,34 @@ export default function Dashboard() {
 function formatDate(value?: string | null) {
   if (!value) return "Pending";
   return new Date(value).toLocaleString();
+}
+
+function formatModuleSummary(runs: RunRecord[]) {
+  const counts = runs.reduce<Record<string, number>>((acc, run) => {
+    const key = formatModuleName(run.module);
+    acc[key] = (acc[key] ?? 0) + 1;
+    return acc;
+  }, {});
+
+  const order = ["Corridor", "MoatLens", "Navigator"];
+  return order.map((name) => `${name} ${counts[name] ?? 0}`).join(" · ");
+}
+
+function formatModuleName(module: string) {
+  const normalized = module.toLowerCase();
+  if (normalized.includes("corridor")) return "Corridor";
+  if (normalized.includes("moatlens")) return "MoatLens";
+  if (normalized.includes("navigator")) return "Navigator";
+  return module;
+}
+
+function MetricBlock({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl border border-border bg-cream p-5">
+      <p className="min-h-[2.5rem] text-sm uppercase tracking-[0.16em] text-ink-secondary">
+        {label}
+      </p>
+      <p className="mt-3 text-3xl font-medium tracking-tight text-ink">{value}</p>
+    </div>
+  );
 }

@@ -52,7 +52,7 @@ export default function RoutePage() {
     <PageShell>
       <StepBadge number={3} label="Route" />
       <section className="mt-8 max-w-4xl">
-        <h1>Navigator</h1>
+        <h1 className="text-[clamp(1.75rem,3vw,2.5rem)]">Navigator</h1>
         <p className="mt-6 max-w-2xl text-lg leading-8 text-ink-secondary">
           Route a founder toward the SwarmSpace pathway that matches readiness,
           technical signal, and evidence quality.
