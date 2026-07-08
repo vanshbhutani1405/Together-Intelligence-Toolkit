@@ -37,7 +37,7 @@ export default function Dashboard() {
       <section className="mt-16 grid gap-6 md:grid-cols-[0.8fr_1.2fr]">
         <div className="rounded-xl border border-border bg-white p-8">
           <p className="text-sm text-ink-secondary">Total runs</p>
-          <p className="mt-6 font-serif text-7xl font-medium tracking-tight">
+          <p className="mt-6 font-sans text-7xl font-medium tracking-tight">
             {runs.length}
           </p>
           <div className="mt-8 space-y-3">

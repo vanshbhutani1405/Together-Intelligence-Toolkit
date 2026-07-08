@@ -53,6 +53,14 @@ export function getHistory() {
   return request<RunRecord[]>("/api/history");
 }
 
+export function getCandidates() {
+  return request<Candidate[]>("/api/candidates");
+}
+
+export function getCandidateReports(candidateId: number) {
+  return request<ReportRecord[]>(`/api/candidates/${candidateId}/reports`);
+}
+
 export function getReport(id: number) {
   return request<ReportRecord>(`/api/reports/${id}`);
 }

@@ -59,7 +59,7 @@ export default function Discover() {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="AI-native infrastructure..."
-          className="min-h-[64px] flex-1 rounded-full border border-border bg-white px-7 font-serif text-2xl text-ink outline-none transition duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] placeholder:text-ink-secondary focus:border-ink"
+          className="min-h-[64px] flex-1 rounded-full border border-border bg-white px-7 font-sans text-base text-ink outline-none transition duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] placeholder:text-base placeholder:text-ink-secondary focus:border-ink"
         />
         <ActionButton onClick={runDiscovery} disabled={loading || !query.trim()}>
           Run Discovery

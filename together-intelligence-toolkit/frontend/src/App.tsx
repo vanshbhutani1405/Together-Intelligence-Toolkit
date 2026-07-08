@@ -1,4 +1,6 @@
 import { NavLink, Navigate, Route, Routes } from "react-router-dom";
+import CandidateDetail from "@/pages/CandidateDetail";
+import Candidates from "@/pages/Candidates";
 import Dashboard from "@/pages/Dashboard";
 import Diligence from "@/pages/Diligence";
 import Discover from "@/pages/Discover";
@@ -7,6 +9,7 @@ import RoutePage from "@/pages/Route";
 
 const navItems = [
   { to: "/dashboard", label: "Dashboard" },
+  { to: "/candidates", label: "Candidates" },
   { to: "/discover", label: "Discover" },
   { to: "/diligence", label: "Diligence" },
   { to: "/route", label: "Route" },
@@ -20,7 +23,7 @@ function App() {
         <nav className="mx-auto flex max-w-[1200px] flex-col gap-5 rounded-full border border-border bg-white px-5 py-4 shadow-sm md:flex-row md:items-center md:justify-between md:px-7">
           <NavLink
             to="/dashboard"
-            className="font-serif text-sm font-medium uppercase tracking-[0.18em] text-ink"
+            className="font-sans text-sm font-medium uppercase tracking-[0.18em] text-ink"
           >
             Together Intelligence
           </NavLink>
@@ -46,6 +49,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/candidates" element={<Candidates />} />
+        <Route path="/candidates/:id" element={<CandidateDetail />} />
         <Route path="/discover" element={<Discover />} />
         <Route path="/diligence" element={<Diligence />} />
         <Route path="/route" element={<RoutePage />} />

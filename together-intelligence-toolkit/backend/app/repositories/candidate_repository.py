@@ -17,6 +17,8 @@ async def get_by_id(db: AsyncSession, candidate_id: int) -> Candidate | None:
     return await db.get(Candidate, candidate_id)
 
 
-async def list_all(db: AsyncSession) -> list[Candidate]:
-    result = await db.execute(select(Candidate).order_by(Candidate.created_at.desc()))
+async def list_all(db: AsyncSession, limit: int = 50) -> list[Candidate]:
+    result = await db.execute(
+        select(Candidate).order_by(Candidate.created_at.desc()).limit(limit)
+    )
     return list(result.scalars().all())

@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.candidates import router as candidates_router
 from app.api.corridor import router as corridor_router
 from app.api.history import router as history_router
 from app.api.moatlens import router as moatlens_router
@@ -31,6 +32,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(corridor_router)
+app.include_router(candidates_router)
 app.include_router(moatlens_router)
 app.include_router(navigator_router)
 app.include_router(history_router)

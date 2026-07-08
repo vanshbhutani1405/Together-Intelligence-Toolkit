@@ -62,7 +62,7 @@ export default function Diligence() {
           value={candidateId}
           onChange={(event) => setCandidateId(event.target.value)}
           placeholder="Candidate ID"
-          className="min-h-[64px] w-full rounded-full border border-border bg-white px-7 font-serif text-2xl text-ink outline-none transition duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] placeholder:text-ink-secondary focus:border-ink md:max-w-sm"
+          className="min-h-[64px] w-full rounded-full border border-border bg-white px-7 font-sans text-base text-ink outline-none transition duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] placeholder:text-base placeholder:text-ink-secondary focus:border-ink md:max-w-sm"
         />
         <ActionButton onClick={runDiligence} disabled={loading || !parsedId}>
           Run Diligence

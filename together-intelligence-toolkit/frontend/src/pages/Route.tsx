@@ -64,12 +64,12 @@ export default function RoutePage() {
           value={candidateId}
           onChange={(event) => setCandidateId(event.target.value)}
           placeholder="Candidate ID"
-          className="min-h-[64px] w-full rounded-full border border-border bg-white px-7 font-serif text-2xl text-ink outline-none transition duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] placeholder:text-ink-secondary focus:border-ink md:max-w-sm"
+          className="min-h-[64px] w-full rounded-full border border-border bg-white px-7 font-sans text-base text-ink outline-none transition duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] placeholder:text-base placeholder:text-ink-secondary focus:border-ink md:max-w-sm"
         />
         <textarea
           value={applicationText}
           onChange={(event) => setApplicationText(event.target.value)}
-          className="min-h-[220px] rounded-xl border border-border bg-white p-6 text-base leading-7 text-ink outline-none transition duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] placeholder:text-ink-secondary focus:border-ink"
+          className="min-h-[220px] rounded-xl border border-border bg-white p-6 font-sans text-base leading-7 text-ink outline-none transition duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] placeholder:text-base placeholder:text-ink-secondary focus:border-ink"
           placeholder="Paste founder application text..."
         />
         <ActionButton
