@@ -1,12 +1,12 @@
-import { useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useLocation, useSearchParams } from "react-router-dom";
 import ActionButton from "@/components/ActionButton";
 import LoadingReasoning from "@/components/LoadingReasoning";
 import PageShell from "@/components/PageShell";
 import StatusPill from "@/components/StatusPill";
 import StepBadge from "@/components/StepBadge";
-import { routeCandidate } from "@/services/api";
-import type { Recommendation } from "@/types/api";
+import { getCandidateReports, getCandidates, routeCandidate } from "@/services/api";
+import type { Candidate, Recommendation, ReportRecord } from "@/types/api";
 
 const steps = [
   "Parsing application...",
@@ -19,14 +19,63 @@ const steps = [
 const sampleText =
   "Founder: Mira Patel. We are building an AI coding agent platform for enterprise engineering teams with design partners, strong GitHub activity, and early evidence of reduced maintenance work.";
 
+type RouteLocationState = {
+  candidate_id?: string | number;
+};
+
 export default function RoutePage() {
   const [params] = useSearchParams();
-  const [candidateId, setCandidateId] = useState(params.get("candidate_id") ?? "");
-  const [applicationText, setApplicationText] = useState(sampleText);
+  const location = useLocation();
+  const locationState = location.state as RouteLocationState | null;
+  const initialCandidateId =
+    params.get("candidate_id") ?? (locationState?.candidate_id ? String(locationState.candidate_id) : "");
+  const [candidateId, setCandidateId] = useState(initialCandidateId);
+  const [applicationText, setApplicationText] = useState(() => (initialCandidateId ? "" : sampleText));
   const [recommendation, setRecommendation] = useState<Recommendation | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const applicationTextEdited = useRef(false);
   const parsedId = useMemo(() => Number(candidateId), [candidateId]);
+
+  useEffect(() => {
+    if (!candidateId.trim() || !parsedId) return;
+
+    let cancelled = false;
+
+    async function loadCandidateContext() {
+      applicationTextEdited.current = false;
+
+      try {
+        const [candidatesResult, reportsResult] = await Promise.allSettled([
+          getCandidates(),
+          getCandidateReports(parsedId),
+        ]);
+
+        if (cancelled) return;
+
+        const candidate =
+          candidatesResult.status === "fulfilled"
+            ? candidatesResult.value.find((item) => item.id === parsedId) ?? null
+            : null;
+        const reports = reportsResult.status === "fulfilled" ? reportsResult.value : [];
+        const nextValue = buildApplicationText(candidate, reports);
+
+        if (!applicationTextEdited.current && nextValue) {
+          setApplicationText(nextValue);
+        }
+      } catch (loadError) {
+        if (!cancelled) {
+          setError(loadError instanceof Error ? loadError.message : "Unable to load candidate context");
+        }
+      }
+    }
+
+    loadCandidateContext();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [candidateId, parsedId]);
 
   async function runRouting() {
     if (!parsedId || !applicationText.trim()) return;
@@ -68,9 +117,12 @@ export default function RoutePage() {
         />
         <textarea
           value={applicationText}
-          onChange={(event) => setApplicationText(event.target.value)}
+          onChange={(event) => {
+            applicationTextEdited.current = true;
+            setApplicationText(event.target.value);
+          }}
           className="min-h-[220px] rounded-xl border border-border bg-white p-6 font-sans text-base leading-7 text-ink outline-none transition duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] placeholder:text-base placeholder:text-ink-secondary focus:border-ink"
-          placeholder="Paste founder application text..."
+          placeholder="Paste or edit the candidate context here..."
         />
         <ActionButton
           onClick={runRouting}
@@ -119,4 +171,38 @@ export default function RoutePage() {
 function formatPercent(value?: number | null) {
   if (typeof value !== "number") return "n/a";
   return `${Math.round(value * 100)}%`;
+}
+
+function buildApplicationText(candidate: Candidate | null, reports: ReportRecord[]) {
+  const parts: string[] = [];
+
+  if (candidate?.company) {
+    parts.push(`Company: ${candidate.company}`);
+  }
+
+  if (candidate?.description) {
+    parts.push(`Description: ${candidate.description}`);
+  }
+
+  const reasoning = candidate?.reasoning ?? extractReportReasoning(reports);
+  if (reasoning) {
+    parts.push(`Reasoning: ${reasoning}`);
+  }
+
+  return parts.join("\n\n");
+}
+
+function extractReportReasoning(reports: ReportRecord[]) {
+  const diligenceReport = reports.find((report) => report.report_type === "diligence");
+  if (!diligenceReport) return "";
+
+  if (typeof diligenceReport.content === "string") {
+    return diligenceReport.content;
+  }
+
+  if (diligenceReport.content && typeof diligenceReport.content === "object") {
+    return JSON.stringify(diligenceReport.content, null, 2);
+  }
+
+  return "";
 }

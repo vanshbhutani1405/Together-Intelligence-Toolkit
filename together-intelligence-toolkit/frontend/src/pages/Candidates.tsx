@@ -50,6 +50,7 @@ export default function Candidates() {
         <table className="w-full border-collapse text-left">
           <thead>
             <tr className="border-b border-border text-sm text-ink-secondary">
+              <th className="px-6 py-5 font-medium">Candidate ID</th>
               <th className="px-6 py-5 font-medium">Company</th>
               <th className="px-6 py-5 font-medium">Similarity</th>
               <th className="px-6 py-5 font-medium">Confidence</th>
@@ -59,18 +60,21 @@ export default function Candidates() {
           <tbody className="divide-y divide-border">
             {loading ? (
               <tr>
-                <td className="px-6 py-8 text-sm text-ink-secondary" colSpan={4}>
+                <td className="px-6 py-8 text-sm text-ink-secondary" colSpan={5}>
                   Loading candidates...
                 </td>
               </tr>
             ) : candidates.length === 0 ? (
               <tr>
-                <td className="px-6 py-8 text-sm text-ink-secondary" colSpan={4}>
+                <td className="px-6 py-8 text-sm text-ink-secondary" colSpan={5}>
                   No data yet
                 </td>
               </tr>
             ) : candidates.map((candidate) => (
               <tr key={candidate.id}>
+                <td className="px-6 py-5 text-sm text-ink-secondary">
+                  {candidate.id ?? "n/a"}
+                </td>
                 <td className="px-6 py-5">
                   <Link className="hover:text-ink" to={`/candidates/${candidate.id}`}>
                     {candidate.company}
