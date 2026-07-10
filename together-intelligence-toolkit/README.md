@@ -1,74 +1,246 @@
-# Together Intelligence Toolkit
+# 🚀 Together Intelligence Toolkit
 
-Together Intelligence Toolkit is a full-stack research and decision-support app for sourcing candidates, evaluating diligence, and routing recommendations. The backend is a FastAPI service with graph-driven workflows, and the frontend is a Vite + React interface that consumes those APIs.
+> **An AI-powered decision-support platform built for Together Fund that augments the early investment workflow — from startup discovery to AI diligence and founder routing.**
 
-## What it does
+![Python](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi)
+![React](https://img.shields.io/badge/React-Frontend-61DAFB?style=for-the-badge&logo=react)
+![LangGraph](https://img.shields.io/badge/LangGraph-Multi--Agent-orange?style=for-the-badge)
+![Groq](https://img.shields.io/badge/Groq-LLM-red?style=for-the-badge)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-pgvector-336791?style=for-the-badge&logo=postgresql)
 
-The product is organized around three backend workflows: Corridor discovers candidate companies, MoatLens synthesizes a diligence report for a saved candidate, and Navigator turns that diligence into a routing recommendation. The frontend provides dashboards and detail views for browsing candidates, reports, and history.
+---
 
-## Requirements
+## 📌 Overview
 
-- Python 3.12+
-- Node.js 18+
-- A Postgres database with vector support
-- API keys for Groq and GitHub
+Together Intelligence Toolkit is a **full-stack AI platform** designed specifically for **Together Fund**, an operator-led AI venture capital firm.
 
-## Backend setup
+Instead of building isolated AI agents, this project models the actual workflow of an investment team by combining **three connected but independently runnable AI systems**.
+
+```text
+        Discover
+            ↓
+        Evaluate
+            ↓
+          Route
+```
+
+---
+
+# 🏗 System Architecture
+
+<p align="center">
+  <img src="docs/Together%20System%20Architecture.png" width="900"/>
+</p>
+
+---
+
+# 🛰 Corridor Atlas
+
+> AI-powered startup discovery engine.
+
+<p align="center">
+  <img src="docs/CorridorAtlas%20Agent%20Diagram.png" width="850"/>
+</p>
+
+### Features
+
+- Discover startups from GitHub, Hacker News & arXiv
+- Portfolio semantic similarity using pgvector
+- "Why Together?" reasoning
+- Confidence scoring
+- Candidate generation
+- Structured reports
+
+---
+
+# 🧠 AI MoatLens
+
+> Multi-agent AI-native diligence engine.
+
+<p align="center">
+  <img src="docs/MoatLens%20Agent%20Diagram.png" width="850"/>
+</p>
+
+### Multi-Agent Workflow
+
+```text
+Bull Agent
+      ↓
+Bear Agent
+      ↓
+Reflection
+      ↓
+Synthesis
+```
+
+Evaluates:
+
+- Wrapper Risk
+- Model Dependency
+- Data Moat
+- Technical Defensibility
+- AI Differentiation
+- Human Review Recommendation
+
+---
+
+# 🧭 SwarmSpace Navigator
+
+> Founder routing and pathway recommendation engine.
+
+<p align="center">
+  <img src="docs/SwarmSpace%20Agent%20Diagram.png" width="850"/>
+</p>
+
+### Recommends
+
+- Investment
+- AI Studio
+- Research Lab
+- Community
+- Monitor
+
+Generates:
+
+- Routing Recommendation
+- Confidence Score
+- Interview Questions
+- Human Review
+- Missing Evidence
+
+---
+
+# 🔄 Complete Workflow
+
+```text
+GitHub + Hacker News + arXiv
+              │
+              ▼
+      Corridor Atlas
+              │
+        Candidate Profile
+              │
+              ▼
+        AI MoatLens
+              │
+      Diligence Report
+              │
+              ▼
+   SwarmSpace Navigator
+              │
+              ▼
+ Final Recommendation
+```
+
+---
+
+# ⚙️ Tech Stack
+
+| Layer | Technology |
+|--------|------------|
+| Frontend | React, Vite, TailwindCSS, shadcn/ui |
+| Backend | FastAPI |
+| AI Framework | LangGraph |
+| LLM | Groq |
+| Embeddings | sentence-transformers (all-MiniLM-L6-v2) |
+| Database | Supabase PostgreSQL |
+| Vector Search | pgvector |
+| ORM | SQLAlchemy |
+| Deployment | Vercel, Render, Supabase |
+
+---
+
+# 📂 Project Structure
+
+```text
+together-intelligence-toolkit/
+│
+├── backend/
+├── frontend/
+├── docs/
+├── scripts/
+└── README.md
+```
+
+---
+
+# 📖 Technical Documentation
+
+Detailed implementation, architecture decisions, and engineering write-up are available here:
+
+➡️ **[Technical Writeup](docs/writeup.md)**
+
+---
+
+# 🚀 Quick Start
+
+### Backend
 
 ```bash
 cd backend
+
 python -m venv .venv
+
+# Windows
 .venv\Scripts\activate
+
 pip install -r requirements.txt
-```
 
-Set these environment variables before starting the backend:
-
-- `GROQ_API_KEY`
-- `DATABASE_URL`
-- `EMBEDDING_MODEL`
-- `GITHUB_TOKEN`
-- `SUPABASE_URL`
-- `SUPABASE_KEY`
-- `MODEL_NAME`
-- `LOG_LEVEL`
-
-Start the API:
-
-```bash
 uvicorn main:app --reload
 ```
 
-Health check:
-
-```bash
-curl http://127.0.0.1:8000/health
-```
-
-## Frontend setup
+### Frontend
 
 ```bash
 cd frontend
+
 npm install
+
 npm run dev
 ```
 
-Optional frontend environment variable:
+---
 
-- `VITE_API_URL` default: `http://localhost:8000`
+# 🔑 Environment Variables
 
-The dev server runs at `http://127.0.0.1:5173`.
+Create a `.env` file using `.env.example`.
 
-## Main API endpoints
+Required:
 
-- `POST /api/corridor/discover` with `{ "query": "AI infrastructure startups" }`
-- `POST /api/moatlens/evaluate` with `{ "candidate_id": 1 }`
-- `POST /api/navigator/route` with `{ "candidate_id": 1, "application_text": "..." }`
+```text
+GROQ_API_KEY
+DATABASE_URL
+SUPABASE_URL
+SUPABASE_KEY
+GITHUB_TOKEN
+MODEL_NAME
+EMBEDDING_MODEL
+LOG_LEVEL
+```
 
-## Helper scripts
+---
 
-Backend utilities live in `backend/scripts/` and include table creation and portfolio seeding.
+# 🌟 Future Roadmap
 
-## Deployment
+- Portfolio Pulse
+- Founder Backchannel Briefing
+- Founder Evolution Graph
+- Institutional Memory
+- Continuous Portfolio Monitoring
 
-The repo includes a `render.yaml` for backend deployment. The frontend is meant to be deployed separately.
+---
+
+# 📌 Assignment Context
+
+This project was developed as part of the **Together Fund Technical Intern Assignment**.
+
+The objective was to design practical AI-powered decision-support systems tailored specifically to Together Fund's operator-led investment workflow.
+
+---
+
+<div align="center">
+
+### ⭐ Built with FastAPI • LangGraph • Groq • React • PostgreSQL • pgvector ⭐
+
+</div>
