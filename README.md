@@ -1,74 +1,223 @@
 # Together Intelligence Toolkit
 
-Together Intelligence Toolkit is a full-stack research and decision-support app for sourcing candidates, evaluating diligence, and routing recommendations. The backend is a FastAPI service with graph-driven workflows, and the frontend is a Vite + React interface that consumes those APIs.
+> **An AI-powered decision-support platform that augments Together Fund's early investment workflow — from discovering promising AI startups to evaluating technical moats and recommending the right founder pathway.**
 
-## What it does
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688)
+![React](https://img.shields.io/badge/React-Frontend-61DAFB)
+![LangGraph](https://img.shields.io/badge/LangGraph-Multi--Agent-orange)
+![Groq](https://img.shields.io/badge/Groq-LLM-red)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-pgvector-blue)
 
-The product is organized around three backend workflows: Corridor discovers candidate companies, MoatLens synthesizes a diligence report for a saved candidate, and Navigator turns that diligence into a routing recommendation. The frontend provides dashboards and detail views for browsing candidates, reports, and history.
+---
 
-## Requirements
+## Overview
 
-- Python 3.12+
-- Node.js 18+
-- A Postgres database with vector support
-- API keys for Groq and GitHub
+Together Intelligence Toolkit is a full-stack AI platform designed specifically for **Together Fund**, an operator-led AI venture capital firm.
 
-## Backend setup
+Rather than building isolated AI agents, this project models the actual workflow followed by an investment team. It combines three connected decision-support systems into a single application that assists analysts throughout the early investment lifecycle.
+
+```text
+Discover
+    ↓
+Evaluate
+    ↓
+Route
+```
+
+Every module can run independently or as part of a complete end-to-end pipeline.
+
+---
+
+# Modules
+
+## 🛰 Corridor Atlas
+
+Discover high-potential AI startups from GitHub, Hacker News, and arXiv.
+
+The system learns Together Fund's investment thesis from its existing portfolio, performs semantic similarity search using embeddings, explains **"Why Together?"**, assigns confidence scores, and creates structured candidate reports.
+
+---
+
+## 🧠 AI MoatLens
+
+An AI-native diligence engine built specifically for evaluating AI startups.
+
+Instead of relying on a single LLM response, multiple agents debate both the investment opportunity and potential risks before producing a structured diligence report covering:
+
+- Wrapper Risk
+- Model Dependency
+- Data Moat
+- Technical Defensibility
+- AI Differentiation
+- Human Review Recommendation
+
+---
+
+## 🧭 SwarmSpace Navigator
+
+Routes founders to the most appropriate Together Fund pathway.
+
+Instead of simply recommending **Invest** or **Reject**, Navigator analyzes founder applications and recommends pathways such as:
+
+- Investment
+- AI Studio
+- Research Lab
+- Community
+- Monitor
+
+while generating reasoning, interview questions, confidence scores, and missing evidence.
+
+---
+
+# Architecture
+
+The application follows a connected workflow:
+
+```text
+GitHub
+Hacker News
+arXiv
+        │
+        ▼
+Corridor Atlas
+        │
+        ▼
+Candidate Database
+        │
+        ▼
+AI MoatLens
+        │
+        ▼
+Diligence Report
+        │
+        ▼
+SwarmSpace Navigator
+        │
+        ▼
+Final Recommendation
+```
+
+Each module stores structured outputs inside PostgreSQL, allowing downstream modules to continue the workflow while still remaining independently runnable.
+
+---
+
+# Technology Stack
+
+### Frontend
+
+- React
+- Vite
+- Tailwind CSS
+- shadcn/ui
+
+### Backend
+
+- FastAPI
+- LangGraph
+- SQLAlchemy
+
+### AI Stack
+
+- Groq LLM
+- sentence-transformers
+- pgvector
+- PostgreSQL
+
+### Deployment
+
+- Frontend → Vercel
+- Backend → Render
+- Database → Supabase PostgreSQL
+
+---
+
+# Features
+
+- Multi-Agent AI Workflows
+- Semantic Startup Discovery
+- AI-Specific Investment Diligence
+- Founder Routing Recommendations
+- Explainable AI Decisions
+- Human-in-the-Loop Design
+- Visible Reasoning Logs
+- Modern Full-Stack Architecture
+
+---
+
+# Quick Start
+
+## Backend
 
 ```bash
 cd backend
+
 python -m venv .venv
+
 .venv\Scripts\activate
+
 pip install -r requirements.txt
-```
 
-Set these environment variables before starting the backend:
-
-- `GROQ_API_KEY`
-- `DATABASE_URL`
-- `EMBEDDING_MODEL`
-- `GITHUB_TOKEN`
-- `SUPABASE_URL`
-- `SUPABASE_KEY`
-- `MODEL_NAME`
-- `LOG_LEVEL`
-
-Start the API:
-
-```bash
 uvicorn main:app --reload
 ```
 
-Health check:
+---
 
-```bash
-curl http://127.0.0.1:8000/health
-```
-
-## Frontend setup
+## Frontend
 
 ```bash
 cd frontend
+
 npm install
+
 npm run dev
 ```
 
-Optional frontend environment variable:
+---
 
-- `VITE_API_URL` default: `http://localhost:8000`
+## Environment Variables
 
-The dev server runs at `http://127.0.0.1:5173`.
+Create a `.env` file using `.env.example`.
 
-## Main API endpoints
+Required variables:
 
-- `POST /api/corridor/discover` with `{ "query": "AI infrastructure startups" }`
-- `POST /api/moatlens/evaluate` with `{ "candidate_id": 1 }`
-- `POST /api/navigator/route` with `{ "candidate_id": 1, "application_text": "..." }`
+- GROQ_API_KEY
+- DATABASE_URL
+- GITHUB_TOKEN
+- SUPABASE_URL
+- SUPABASE_KEY
+- MODEL_NAME
+- EMBEDDING_MODEL
+- LOG_LEVEL
 
-## Helper scripts
+---
 
-Backend utilities live in `backend/scripts/` and include table creation and portfolio seeding.
+# API Endpoints
 
-## Deployment
+| Module | Endpoint |
+|----------|-------------------------------|
+| Corridor Atlas | `/api/corridor/discover` |
+| AI MoatLens | `/api/moatlens/evaluate` |
+| SwarmSpace Navigator | `/api/navigator/route` |
+| History | `/api/history` |
 
-The repo includes a `render.yaml` for backend deployment. The frontend is meant to be deployed separately.
+---
+
+# Project Structure
+
+```
+backend/
+frontend/
+docs/
+scripts/
+```
+
+---
+
+# Assignment Context
+
+This project was built as part of the **Together Fund Technical Intern Assignment**.
+
+The objective was not simply to build AI agents, but to design practical decision-support systems tailored specifically to Together Fund's operator-led investment workflow.
+
+---
