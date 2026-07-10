@@ -1,99 +1,68 @@
 # 🚀 Together Intelligence Toolkit
 
-> **An AI-powered decision-support platform built for Together Fund that augments the early investment workflow — from startup discovery to AI diligence and founder routing.**
+> **An AI-powered decision-support platform built for Together Fund to augment the investment workflow from startup discovery to AI diligence and founder routing.**
 
-![Python](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python)
-![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi)
-![React](https://img.shields.io/badge/React-Frontend-61DAFB?style=for-the-badge&logo=react)
-![LangGraph](https://img.shields.io/badge/LangGraph-Multi--Agent-orange?style=for-the-badge)
-![Groq](https://img.shields.io/badge/Groq-LLM-red?style=for-the-badge)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-pgvector-336791?style=for-the-badge&logo=postgresql)
+![Python](https://img.shields.io/badge/Python-3.12-blue?style=flat-square)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=flat-square)
+![React](https://img.shields.io/badge/React-Frontend-61DAFB?style=flat-square)
+![LangGraph](https://img.shields.io/badge/LangGraph-Multi--Agent-orange?style=flat-square)
+![Groq](https://img.shields.io/badge/Groq-LLM-red?style=flat-square)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-pgvector-336791?style=flat-square)
 
 ---
 
 ## 📌 Overview
 
-Together Intelligence Toolkit is a **full-stack AI platform** designed specifically for **Together Fund**, an operator-led AI venture capital firm.
-
-Instead of building isolated AI agents, this project models the actual workflow of an investment team by combining **three connected but independently runnable AI systems**.
+Together Intelligence Toolkit is a full-stack AI platform designed specifically for **Together Fund**. It models the early investment workflow through **three connected but independently runnable AI modules**.
 
 ```text
-        Discover
-            ↓
-        Evaluate
-            ↓
-          Route
+Discover
+    ↓
+Evaluate
+    ↓
+Route
 ```
 
 ---
 
-# 🏗 System Architecture
+## 🏗️ System Architecture
 
 <p align="center">
-  <img src="docs/Together%20System%20Architecture.png" width="900"/>
+<img src="docs/Together%20System%20Architecture.png" width="700">
 </p>
 
 ---
 
-# 🛰 Corridor Atlas
+## 🛰️ Corridor Atlas
 
-> AI-powered startup discovery engine.
+Discovers promising AI startups from **GitHub, Hacker News and arXiv**, compares them with Together Fund's portfolio using semantic search, and generates **Why Together?** explanations with confidence scores.
 
 <p align="center">
-  <img src="docs/CorridorAtlas%20Agent%20Diagram.png" width="850"/>
+<img src="docs/CorridorAtlas%20Agent%20Diagram.png" width="700">
 </p>
-
-### Features
-
-- Discover startups from GitHub, Hacker News & arXiv
-- Portfolio semantic similarity using pgvector
-- "Why Together?" reasoning
-- Confidence scoring
-- Candidate generation
-- Structured reports
 
 ---
 
-# 🧠 AI MoatLens
+## 🧠 AI MoatLens
 
-> Multi-agent AI-native diligence engine.
-
-<p align="center">
-  <img src="docs/MoatLens%20Agent%20Diagram.png" width="850"/>
-</p>
-
-### Multi-Agent Workflow
-
-```text
-Bull Agent
-      ↓
-Bear Agent
-      ↓
-Reflection
-      ↓
-Synthesis
-```
-
-Evaluates:
+A multi-agent diligence engine that evaluates:
 
 - Wrapper Risk
-- Model Dependency
 - Data Moat
+- Model Dependency
 - Technical Defensibility
-- AI Differentiation
-- Human Review Recommendation
+
+using **Bull → Bear → Reflection → Synthesis** reasoning.
+
+<p align="center">
+<img src="docs/MoatLens%20Agent%20Diagram.png" width="700">
+</p>
 
 ---
 
-# 🧭 SwarmSpace Navigator
+## 🧭 SwarmSpace Navigator
 
-> Founder routing and pathway recommendation engine.
-
-<p align="center">
-  <img src="docs/SwarmSpace%20Agent%20Diagram.png" width="850"/>
-</p>
-
-### Recommends
+Analyzes founder applications and recommends the best Together pathway:
 
 - Investment
 - AI Studio
@@ -101,146 +70,57 @@ Evaluates:
 - Community
 - Monitor
 
-Generates:
+along with reasoning, interview questions, confidence, and human review guidance.
 
-- Routing Recommendation
-- Confidence Score
-- Interview Questions
-- Human Review
-- Missing Evidence
+<p align="center">
+<img src="docs/SwarmSpace%20Agent%20Diagram.png" width="700">
+</p>
 
 ---
 
-# 🔄 Complete Workflow
-
-```text
-GitHub + Hacker News + arXiv
-              │
-              ▼
-      Corridor Atlas
-              │
-        Candidate Profile
-              │
-              ▼
-        AI MoatLens
-              │
-      Diligence Report
-              │
-              ▼
-   SwarmSpace Navigator
-              │
-              ▼
- Final Recommendation
-```
-
----
-
-# ⚙️ Tech Stack
+## ⚙️ Tech Stack
 
 | Layer | Technology |
 |--------|------------|
 | Frontend | React, Vite, TailwindCSS, shadcn/ui |
-| Backend | FastAPI |
-| AI Framework | LangGraph |
-| LLM | Groq |
-| Embeddings | sentence-transformers (all-MiniLM-L6-v2) |
-| Database | Supabase PostgreSQL |
-| Vector Search | pgvector |
+| Backend | FastAPI, LangGraph |
+| AI | Groq + sentence-transformers |
+| Database | Supabase PostgreSQL + pgvector |
 | ORM | SQLAlchemy |
-| Deployment | Vercel, Render, Supabase |
+| Deployment | Vercel + Render + Supabase |
 
 ---
 
-# 📂 Project Structure
+## 📖 Documentation
 
-```text
-together-intelligence-toolkit/
-│
-├── backend/
-├── frontend/
-├── docs/
-├── scripts/
-└── README.md
-```
+- 📄 **Technical Writeup:** [docs/writeup.md](docs/writeup.md)
 
 ---
 
-# 📖 Technical Documentation
-
-Detailed implementation, architecture decisions, and engineering write-up are available here:
-
-➡️ **[Technical Writeup](docs/writeup.md)**
-
----
-
-# 🚀 Quick Start
-
-### Backend
+## 🚀 Quick Start
 
 ```bash
+# Backend
 cd backend
-
-python -m venv .venv
-
-# Windows
-.venv\Scripts\activate
-
 pip install -r requirements.txt
-
 uvicorn main:app --reload
-```
 
-### Frontend
-
-```bash
+# Frontend
 cd frontend
-
 npm install
-
 npm run dev
 ```
 
 ---
 
-# 🔑 Environment Variables
+## 📌 Assignment
 
-Create a `.env` file using `.env.example`.
-
-Required:
-
-```text
-GROQ_API_KEY
-DATABASE_URL
-SUPABASE_URL
-SUPABASE_KEY
-GITHUB_TOKEN
-MODEL_NAME
-EMBEDDING_MODEL
-LOG_LEVEL
-```
+Built as part of the **Together Fund Technical Intern Assignment** to demonstrate practical AI-powered decision-support systems tailored to an operator-led venture capital firm's workflow.
 
 ---
 
-# 🌟 Future Roadmap
+<p align="center">
 
-- Portfolio Pulse
-- Founder Backchannel Briefing
-- Founder Evolution Graph
-- Institutional Memory
-- Continuous Portfolio Monitoring
+**⭐ Built with FastAPI • LangGraph • Groq • React • PostgreSQL ⭐**
 
----
-
-# 📌 Assignment Context
-
-This project was developed as part of the **Together Fund Technical Intern Assignment**.
-
-The objective was to design practical AI-powered decision-support systems tailored specifically to Together Fund's operator-led investment workflow.
-
----
-
-<div align="center">
-
-### ⭐ Built with FastAPI • LangGraph • Groq • React • PostgreSQL • pgvector ⭐
-
-</div>
+</p>
