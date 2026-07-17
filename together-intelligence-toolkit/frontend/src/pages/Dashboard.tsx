@@ -72,7 +72,7 @@ export default function Dashboard() {
 
       {error ? <p className="mt-10 text-sm text-terracotta">{error}</p> : null}
 
-      {loading ? <p className="mt-10 text-sm text-ink-secondary">Loading dashboard...</p> : null}
+      {loading ? <p className="mt-10 text-sm text-ink-secondary">Loading dashboard data... This may take a few moments. In the meantime, feel free to watch the demo. </p> : null}
 
       <section className="mt-16 grid gap-6">
         <div className="rounded-xl border border-border bg-white p-8">
