@@ -16,6 +16,7 @@
 Together Intelligence Toolkit is a full-stack AI platform designed specifically for **Together Fund**, an operator-led AI venture capital firm.
 
 Rather than building isolated AI agents, this project models the actual workflow followed by an investment team. It combines three connected decision-support systems into a single application that assists analysts throughout the early investment lifecycle.
+> 📖 **For developers:** Explore the complete technical documentation, architecture, and implementation details in the **[Technical README](https://github.com/vanshbhutani1405/Together-Intelligence-Toolkit/tree/main/together-intelligence-toolkit#readme)**.
 
 ```text
 Discover
