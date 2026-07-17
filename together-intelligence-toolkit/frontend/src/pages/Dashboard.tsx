@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
+import ActionButton from "@/components/ActionButton";
 import PageShell from "@/components/PageShell";
 import StatusPill from "@/components/StatusPill";
 import { getHistory } from "@/services/api";
 import type { RunRecord } from "@/types/api";
+
+export const DEMO_VIDEO_URL = "https://youtu.be/9K8Z_SpsUR0";
 
 export default function Dashboard() {
   const [runs, setRuns] = useState<RunRecord[]>([]);
@@ -54,6 +57,13 @@ export default function Dashboard() {
           Dashboard
         </p>
         <h1 className="text-[clamp(1.75rem,3vw,2.5rem)]">Overview</h1>
+        <div className="mt-6">
+          <ActionButton
+            onClick={() => window.open(DEMO_VIDEO_URL, "_blank", "noopener,noreferrer")}
+          >
+            Watch Demo
+          </ActionButton>
+        </div>
         <p className="mt-6 max-w-2xl text-lg leading-8 text-ink-secondary">
           A quiet view of recent intelligence workflows across discovery,
           diligence, and routing.
